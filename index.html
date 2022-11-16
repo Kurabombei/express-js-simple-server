@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>politeh sr-1</title>
+	<style>
+		body {
+			display: flex;
+			flex-flow: column nowrap;
+            justify-content: center;
+			align-items: center;
+			background-color: #ffd2b5;
+		}
+
+		h1 {
+            margin-top: 8rem;
+		}
+
+        table {
+			background-color: #ffa86e;
+		}
+
+        table, th, td {
+            border: 1px solid black;
+        }
+        * {
+	        border-radius: 0.125rem;
+	        padding: 0.5rem;
+        }
+	</style>
+</head>
+<body>
+<h1>Перерахунок секунд в години</h1>
+<table>
+	<tr>
+		<th>Час (секунди)</th>
+		<td><input type="number" id="seconds" name="seconds"></td>
+		<td><button onclick="sendRequest()">Зробити обрахунок</button></td>
+	</tr>
+	<tr>
+		<th>Час (години)</th>
+		<td><input type="number" id="result" disabled></td>
+		<td><button onclick="clearInput()">Очистити поля</button></td>
+	</tr>
+</table>
+<script>
+	async function sendRequest() {
+		const input = document.getElementById('seconds').value;
+		let body = {seconds: input};
+		let response = fetch('/seconds', {
+			method: 'POST',
+			headers: {
+			'Content-Type': 'application/json'
+		},
+			body: JSON.stringify(body)
+		})
+			.then((response) => response.json())
+			.then((response) => document.getElementById('result').value = response.result);
+	}
+
+	function clearInput() {
+		document.getElementById("seconds").value = "";
+		document.getElementById('result').value = "";
+	}
+</script>
+</body>
+</html>
