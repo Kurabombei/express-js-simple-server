@@ -5,7 +5,7 @@
 	<meta name="viewport"
 	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>politeh sr-1</title>
+	<title>politeh sr-2</title>
 	<style>
 		body {
 			display: flex;
@@ -15,17 +15,31 @@
 			background-color: #ffd2b5;
 		}
 
-		h1 {
+        .card {
+	        height: 400px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 100px 1fr;
+            grid-column-gap: 0;
+            grid-row-gap: 0;
             margin-top: 8rem;
-		}
-
-        table {
+	        border-radius: 5px;
 			background-color: #ffa86e;
 		}
 
-        table, th, td {
-            border: 1px solid black;
+        .card__title {
+            grid-area: 1 / 1 / 2 / 4;
+		}
+
+        .card__col {
+            display: grid;
+            grid-template-rows: repeat(3, 60px) 1fr;
         }
+
+        .card__col > div:nth-last-child(1) {
+            justify-self: stretch;
+        }
+
         * {
 	        border-radius: 0.125rem;
 	        padding: 0.5rem;
@@ -33,24 +47,32 @@
 	</style>
 </head>
 <body>
-<h1>Перерахунок секунд в години</h1>
-<table>
-	<tr>
-		<th>Час (секунди)</th>
-		<td><input type="number" id="seconds" name="seconds"></td>
-		<td><button onclick="sendRequest()">Зробити обрахунок</button></td>
-	</tr>
-	<tr>
-		<th>Час (години)</th>
-		<td><input type="number" id="result" disabled></td>
-		<td><button onclick="clearInput()">Очистити поля</button></td>
-	</tr>
-</table>
+<section class="card">
+	<h1 class="card__title">Обчислити вираз Y= 1+Xij + ((Xi)^2)/2! + ((Xij)^3)/3!</h1>
+	<div class="card__col">
+		<div class="card__name">i = </div>
+		<div class="card__name">j = </div>
+		<div class="card__name">Xij = </div>
+		<div class="card__name">Y = </div>
+	</div>
+	<div class="card__col">
+		<div class="card__input"><input type="number" id="var_i" name="var_i"></div>
+		<div class="card__input"><input type="number" id="var_j" name="var_j"></div>
+		<div class="card__input"><input type="number" id="var_x" name="var_x"></div>
+		<div class="card__input"><input type="number" id="result" disabled></div>
+	</div>
+	<div class="card__col">
+		<div class="card__action"><button onclick="sendRequest()">Зробити обрахунок</button></div>
+		<div class="card__action"><button onclick="clearInput()">Очистити поля</button></div>
+		<div class="card__action"></div>
+		<div class="card__action"><button onclick="closePage()">Вийти</button></div>
+	</div>
+</section>
 <script>
 	async function sendRequest() {
-		const input = document.getElementById('seconds').value;
-		let body = {seconds: input};
-		let response = fetch('/seconds', {
+		const input = document.getElementById('var_x').value;
+		let body = {var_x: input};
+		let response = fetch('/calculate_y', {
 			method: 'POST',
 			headers: {
 			'Content-Type': 'application/json'
@@ -62,8 +84,14 @@
 	}
 
 	function clearInput() {
-		document.getElementById("seconds").value = "";
+		document.getElementById("var_i").value = "";
+		document.getElementById('var_j').value = "";
+		document.getElementById("var_x").value = "";
 		document.getElementById('result').value = "";
+	}
+
+	function closePage() {
+		document.close();
 	}
 </script>
 </body>

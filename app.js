@@ -10,18 +10,22 @@ app.get('/', (req, res) => {
 	res.sendFile(__dirname + "/index.html");
 })
 
-function secondsToHours(seconds) {
-	if(!seconds) {
-		return 0;
-	}
-	const res =  parseInt(seconds, 10);
-	return Math.floor(res % (3600*24) / 3600);
+function fac(n){
+	return(n<2)?1:fac(n-1)*n;
 }
 
-app.post('/seconds', (req, res) => {
-	console.log(`Отримано секунди ${req.body.seconds}`);
-	const result = secondsToHours(req.body.seconds);
-	console.log(`Пораховано години ${result}`);
+function calculateY(x) {
+	if(!x) {
+		return 0;
+	}
+	const xij =  parseFloat(x);
+	return (1 + xij + ((Math.pow(xij, 2))/fac(2)) + ((Math.pow(xij, 3))/fac(3)));
+}
+
+app.post('/calculate_y', (req, res) => {
+	console.log(`Отримано змінну x ${req.body.var_x}`);
+	const result = calculateY(req.body.var_x);
+	console.log(`Пораховано Y ${result}`);
 	res.send({result: result});
 })
 
